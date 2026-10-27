@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="description" content="A modern rock, paper, scissors arcade. Choose your move and challenge the CPU.">
+  <title>RPS Arena — Rock, Paper, Scissors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="rock.css">
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="RPS Arena home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none">
+            <path d="M20 3.5 34.3 11.8v16.4L20 36.5 5.7 28.2V11.8L20 3.5Z" stroke="currentColor" stroke-width="2"/>
+            <path d="m13 14 7 12 7-12M13 14h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>RPS<span class="brand-accent">ARENA</span></span>
+      </a>
+      <div class="topbar-status"><span class="status-dot"></span> MATCH READY</div>
+    </header>
+
+    <section class="intro" aria-labelledby="game-title">
+      <p class="eyebrow">THE CLASSIC, REIMAGINED</p>
+      <h1 id="game-title">Make your <span>move.</span></h1>
+      <p class="intro-copy">Read the opponent. Pick your play. Own the arena.</p>
+    </section>
+
+    <section class="scoreboard" id="scoreboard" data-tour="scoreboard" aria-label="Match scoreboard">
+      <div class="score-player">
+        <span class="score-caption" id="player-name">PLAYER</span>
+        <span class="score-number" id="player-score" aria-live="polite">0</span>
+      </div>
+      <div class="score-center">
+        <span class="score-divider"></span>
+        <span class="score-caption" id="matchup-label">VS CPU</span>
+        <span class="tie-score"><span id="ties-score">0</span> <span>draws</span></span>
+        <span class="score-divider"></span>
+      </div>
+      <div class="score-cpu">
+        <span class="score-caption">CPU</span>
+        <span class="score-number" id="cpu-score" aria-live="polite">0</span>
+      </div>
+    </section>
+
+    <section class="battle-card" id="battle-arena" data-tour="arena" aria-label="Battle arena">
+      <div class="arena-heading">
+        <span class="arena-live"><span class="status-dot"></span> LIVE ARENA</span>
+        <span class="round-label" id="round-label">READY FOR ROUND 01</span>
+      </div>
+      <div class="arena" id="arena">
+        <div class="fighter fighter-player" id="player-fighter">
+          <div class="fighter-meta">
+            <span class="fighter-avatar" aria-hidden="true">
+              <svg viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="19" fill="#17283c" stroke="#315675"/>
+                <circle cx="20" cy="15" r="6" stroke="#74c9ff" stroke-width="1.8"/>
+                <path d="M9 33c1.7-5.8 5.5-8.7 11-8.7s9.3 2.9 11 8.7" stroke="#74c9ff" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="fighter-name">YOU</span>
+          </div>
+          <div class="choice-display" id="player-view" aria-label="Your move">
+            <span class="placeholder-mark" aria-hidden="true">?</span>
+          </div>
+          <span class="move-name" id="player-move-name">Choose a move</span>
+        </div>
+
+        <div class="versus" aria-hidden="true"><span>VS</span></div>
+
+        <div class="fighter fighter-cpu" id="cpu-fighter">
+          <div class="fighter-meta">
+            <span class="fighter-avatar" aria-hidden="true">
+              <svg viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="19" fill="#2b1d30" stroke="#68405c"/>
+                <path d="M13 15.5h14a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3v-7a3 3 0 0 1 3-3Z" stroke="#ff8ab5" stroke-width="1.8"/>
+                <path d="M17 15.5v-2a3 3 0 0 1 6 0v2M15.5 21.5h.1m8.8 0h.1M16 25h8" stroke="#ff8ab5" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="fighter-name">CPU</span>
+          </div>
+          <div class="choice-display" id="cpu-view" aria-label="CPU move">
+            <span class="placeholder-mark" aria-hidden="true">?</span>
+          </div>
+          <span class="move-name" id="cpu-move-name">Waiting on CPU</span>
+        </div>
+      </div>
+      <div class="result-banner" id="outcome" role="status" aria-live="polite">
+        <span class="result-indicator" aria-hidden="true"></span>
+        <span id="outcome-text">Choose your move to begin</span>
+      </div>
+    </section>
+
+    <section class="controls-section" id="control-panel" data-tour="controls" aria-labelledby="controls-title">
+      <div class="controls-heading">
+        <div>
+          <p class="eyebrow">YOUR TURN</p>
+          <h2 id="controls-title">Choose your move</h2>
+        </div>
+        <span class="keyboard-hint">PICK ONE TO PLAY</span>
+      </div>
+      <div class="controls" id="controls">
+        <button class="move-button" type="button" data-choice="rock" aria-label="Play rock">
+          <span class="move-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M20 39.7V27.5c0-3.3 2.4-5.8 5.5-5.8 2.1 0 3.8 1.1 4.7 2.8.9-2.6 3.2-4.2 6-4.2s5.1 1.6 6 4.2c1-1.7 2.7-2.8 4.7-2.8 3.1 0 5.5 2.5 5.5 5.8v10.8c0 3.9-1.9 7.5-5.1 9.7L43 52.3 44 59H22l-2.3-7.1-9-8.1a4.5 4.5 0 0 1 5.9-6.8l3.4 2.4Z" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M30 25v8m12-8v8M17 38c2.4 0 4.6 1.2 6.1 3.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="move-button-text">Rock</span>
+          <span class="move-button-sub">The solid choice</span>
+        </button>
+        <button class="move-button" type="button" data-choice="paper" aria-label="Play paper">
+          <span class="move-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M17 31V13a4.5 4.5 0 0 1 9 0v14-18a4.5 4.5 0 0 1 9 0v18-15a4.5 4.5 0 0 1 9 0v16-12a4.5 4.5 0 0 1 9 0v20c0 11.8-6.4 19-17.5 19h-3.1c-6 0-9.6-2.7-12.6-7.4l-7.8-12.2a4.7 4.7 0 0 1 7.8-5.2L27 37" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="move-button-text">Paper</span>
+          <span class="move-button-sub">The clever cover</span>
+        </button>
+        <button class="move-button" type="button" data-choice="scissors" aria-label="Play scissors">
+          <span class="move-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M21 34.5 13 13a4.5 4.5 0 0 1 8.4-3L32 32.5 42.6 10a4.5 4.5 0 0 1 8.3 3l-8 21.5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 34.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17Zm22 0a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17Z" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="2.8"/>
+            </svg>
+          </span>
+          <span class="move-button-text">Scissors</span>
+          <span class="move-button-sub">The quick strike</span>
+        </button>
+      </div>
+    </section>
+
+    <footer class="game-footer">
+      <span>PLAY YOUR NEXT MOVE</span>
+      <button class="reset-button" id="reset-button" type="button">
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M3.3 9a6.8 6.8 0 1 1 .8 4.3M3.3 4.8V9h4.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Reset Match
+      </button>
+    </footer>
+  </main>
+
+  <div class="onboarding-backdrop" id="onboarding" hidden>
+    <section class="onboarding-dialog" role="dialog" aria-modal="true" aria-labelledby="welcome-title" aria-describedby="welcome-description">
+      <div class="dialog-emblem" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none">
+          <path d="M24 3.5 42 13.8v20.4L24 44.5 6 34.2V13.8L24 3.5Z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="m16 18 8 13 8-13M16 18h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <p class="eyebrow">WELCOME, CHALLENGER</p>
+      <h2 id="welcome-title">Welcome to the Arena.</h2>
+      <p class="dialog-copy" id="welcome-description">Enter your name to enter the battle.</p>
+      <form id="name-form" class="name-form">
+        <label for="name-input">YOUR NAME</label>
+        <input id="name-input" name="playerName" type="text" maxlength="24" autocomplete="given-name" placeholder="Enter your name" required>
+        <p class="form-error" id="name-error" role="alert" hidden></p>
+        <button class="enter-button" type="submit">Enter the arena</button>
+      </form>
+    </section>
+  </div>
+
+  <div class="tour-layer" id="tour-layer" hidden>
+    <section class="tour-tooltip" id="tour-tooltip" role="dialog" aria-modal="true" aria-labelledby="tour-title" aria-describedby="tour-description">
+      <div class="tour-progress">
+        <span id="tour-step-label">01 / 03</span>
+        <button class="tour-skip" id="tour-skip" type="button">Skip tour</button>
+      </div>
+      <h2 id="tour-title">Your scoreboard</h2>
+      <p id="tour-description">Track your wins and losses here.</p>
+      <div class="tour-actions">
+        <span class="tour-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <button class="tour-next" id="tour-next" type="button">Next</button>
+      </div>
+    </section>
+  </div>
+
+  <template id="icon-rock">
+    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <path d="M20 39.7V27.5c0-3.3 2.4-5.8 5.5-5.8 2.1 0 3.8 1.1 4.7 2.8.9-2.6 3.2-4.2 6-4.2s5.1 1.6 6 4.2c1-1.7 2.7-2.8 4.7-2.8 3.1 0 5.5 2.5 5.5 5.8v10.8c0 3.9-1.9 7.5-5.1 9.7L43 52.3 44 59H22l-2.3-7.1-9-8.1a4.5 4.5 0 0 1 5.9-6.8l3.4 2.4Z" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M30 25v8m12-8v8M17 38c2.4 0 4.6 1.2 6.1 3.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+  </template>
+  <template id="icon-paper">
+    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <path d="M17 31V13a4.5 4.5 0 0 1 9 0v14-18a4.5 4.5 0 0 1 9 0v18-15a4.5 4.5 0 0 1 9 0v16-12a4.5 4.5 0 0 1 9 0v20c0 11.8-6.4 19-17.5 19h-3.1c-6 0-9.6-2.7-12.6-7.4l-7.8-12.2a4.7 4.7 0 0 1 7.8-5.2L27 37" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </template>
+  <template id="icon-scissors">
+    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <path d="M21 34.5 13 13a4.5 4.5 0 0 1 8.4-3L32 32.5 42.6 10a4.5 4.5 0 0 1 8.3 3l-8 21.5" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 34.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17Zm22 0a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17Z" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="2.8"/>
+    </svg>
+  </template>
+  <script src="game.js" defer></script>
+</body>
+</html>
